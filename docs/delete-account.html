@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account & Data Deletion Request — AI pro 001 (Infinity Content AI)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-accent: #818cf8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --rose: #f43f5e;
+      --rose-hover: #e11d48;
+      --emerald: #10b981;
+      --code-bg: #0b1120;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.7;
+      padding: 0;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: linear-gradient(180deg, #181126 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--card-border);
+      padding: 48px 24px 36px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fda4af;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 40%, #fda4af 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    p { color: #d1d5db; font-size: 0.96rem; margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul, ol {
+      margin: 10px 0 14px 20px;
+      color: #d1d5db;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .highlight-box {
+      background: rgba(244, 63, 94, 0.08);
+      border-left: 4px solid var(--rose);
+      padding: 16px 20px;
+      border-radius: 0 12px 12px 0;
+      margin: 18px 0;
+    }
+
+    .highlight-box.green {
+      background: rgba(16, 185, 129, 0.08);
+      border-left-color: var(--emerald);
+    }
+
+    .btn-delete {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--rose);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      transition: background 0.2s ease, transform 0.1s ease;
+      cursor: pointer;
+      border: none;
+      margin-top: 8px;
+    }
+
+    .btn-delete:hover {
+      background: var(--rose-hover);
+      transform: translateY(-1px);
+    }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: #fda4af;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: #0b1120;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--rose);
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      background: #0b1120;
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">
+      <span>🛡️ Google Play Verified Account Deletion Resource</span>
+    </div>
+    <h1>Account & Data Deletion Portal</h1>
+    <p style="color: #9ca3af; max-width: 600px; margin: 0 auto;">
+      Submit a formal account and personal data deletion request for <strong>AI pro 001</strong> (Infinity Content AI).
+    </p>
+    <div class="meta-bar">
+      <span><strong>Package Name:</strong> <code class="code-pill">com.aistudio.contentgenai.vyrkzp</code></span>
+      <span>•</span>
+      <span><strong>Compliance:</strong> Google Play Data Safety Policy</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Section 1 -->
+    <div class="card">
+      <h2><span>1.</span> Overview of Deletion Rights</h2>
+      <p>
+        In strict compliance with <strong>Google Play's User Data & Account Deletion Policy</strong>, GDPR, and CCPA regulations, all users of <strong>AI pro 001</strong> have the unequivocal right to request permanent deletion of their account profile and all associated data.
+      </p>
+      <div class="highlight-box">
+        <strong>Permanent Action:</strong> Once processed, your account credentials, generated social drafts, scheduled campaigns, and brand presets are permanently deleted and cannot be recovered.
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2><span>2.</span> Two Ways to Delete Your Account</h2>
+      <ol>
+        <li>
+          <strong>In-App Immediate Deletion:</strong>
+          <p style="margin-top: 6px;">Open the <strong>AI pro 001</strong> app on your Android device > Navigate to <strong>Settings</strong> > Scroll to <strong>Creator Profile & Security</strong> > Tap <strong>Delete Account</strong>. This will immediately purge all local database tables, cached media, and authentication tokens.</p>
+        </li>
+        <li>
+          <strong>Web-Based Request (This Portal):</strong>
+          <p style="margin-top: 6px;">If you have uninstalled the app or prefer to request deletion remotely, submit the deletion form below or send an email to our data protection officer at <a href="mailto:stephenampangwapyalenge@gmail.com" style="color: #fda4af;">stephenampangwapyalenge@gmail.com</a>.</p>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Section 3: Deletion Scope -->
+    <div class="card">
+      <h2><span>3.</span> What Data is Deleted?</h2>
+      <p>Upon request, the following records are permanently wiped within <strong>48 business hours</strong>:</p>
+      <ul>
+        <li><strong>Account Profile & Credentials:</strong> Display name, email address, avatar, and authentication IDs.</li>
+        <li><strong>User-Generated Content:</strong> All generated viral captions, AI hooks, call-to-actions, and hashtags.</li>
+        <li><strong>Video Outlines & Scripts:</strong> Scene breakdowns, voiceover text, and script notes.</li>
+        <li><strong>Brand Kits & Custom Preferences:</strong> Niche settings, custom color palettes, and tone guidelines.</li>
+        <li><strong>Content Calendar & Scheduled Releases:</strong> Planned post dates and scheduling drafts.</li>
+        <li><strong>Affiliate Copy & Product Links:</strong> Amazon affiliate analysis and SEO keywords.</li>
+      </ul>
+      <div class="highlight-box green">
+        <strong>Data Retention:</strong> We do not retain any residual personal data following an approved deletion request. Non-identifiable crash aggregates (if any) are kept strictly for operational telemetry.
+      </div>
+    </div>
+
+    <!-- Section 4: Web Request Form -->
+    <div class="card">
+      <h2><span>4.</span> Submit Deletion Request via Web</h2>
+      <p>Fill in your account details below to generate a pre-formatted deletion email to our data protection team:</p>
+
+      <form onsubmit="handleDeletionSubmit(event)">
+        <div class="input-group">
+          <label for="userEmail"><strong>Account Email Address (associated with Google Sign-In):</strong></label>
+          <input type="email" id="userEmail" required placeholder="your.email@gmail.com" />
+        </div>
+
+        <div class="input-group">
+          <label for="userReason"><strong>Reason for Deletion (Optional):</strong></label>
+          <textarea id="userReason" rows="3" placeholder="I am no longer using the app / Close account"></textarea>
+        </div>
+
+        <button type="submit" class="btn-delete">
+          🗑️ Submit Account Deletion Request
+        </button>
+      </form>
+    </div>
+
+    <!-- Section 5: Direct Contact -->
+    <div class="card">
+      <h2><span>5.</span> Direct Contact Details</h2>
+      <p>You can also contact our compliance officer directly at:</p>
+      <ul style="list-style: none; margin-left: 0;">
+        <li><strong>Lead Developer:</strong> Stephen Ampang Wapyalenge</li>
+        <li><strong>Application Name:</strong> AI pro 001 (Infinity Content AI)</li>
+        <li><strong>Package ID:</strong> com.aistudio.contentgenai.vyrkzp</li>
+        <li><strong>Email:</strong> <a href="mailto:stephenampangwapyalenge@gmail.com" style="color: #fda4af;">stephenampangwapyalenge@gmail.com</a></li>
+        <li><strong>Subject Line:</strong> <code class="code-pill">Account & Data Deletion Request - AI pro 001</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 AI pro 001 (Infinity Content AI). Compliant with Google Play Developer Policies.</p>
+    <p style="margin-top: 6px;"><a href="index.html" style="color: #a5b4fc; text-decoration: none;">View Official Privacy Policy</a></p>
+  </footer>
+
+  <script>
+    function handleDeletionSubmit(e) {
+      e.preventDefault();
+      var email = document.getElementById('userEmail').value;
+      var reason = document.getElementById('userReason').value || 'User requested account closure';
+      
+      var subject = encodeURIComponent('Account & Data Deletion Request - AI pro 001: ' + email);
+      var body = encodeURIComponent(
+        'Hello Stephen,\n\n' +
+        'Please permanently delete my account and all associated data for AI pro 001.\n\n' +
+        'Account Email: ' + email + '\n' +
+        'Reason: ' + reason + '\n' +
+        'Application Package: com.aistudio.contentgenai.vyrkzp\n\n' +
+        'Thank you.'
+      );
+
+      window.location.href = 'mailto:stephenampangwapyalenge@gmail.com?subject=' + subject + '&body=' + body;
+    }
+  </script>
+</body>
+</html>

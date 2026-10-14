@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "users": {
+      "path": "users/{userId}",
+      "description": "User profile information",
+      "fields": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "planTier": { "type": "string" },
+        "aiCredits": { "type": "number" },
+        "creatorNiche": { "type": "string" },
+        "totalGenerations": { "type": "number" },
+        "lastSeenAt": { "type": "number" }
+      }
+    },
+    "saved_content": {
+      "path": "users/{userId}/saved_content/{contentId}",
+      "description": "Saved content drafts and packages",
+      "fields": {
+        "id": { "type": "number" },
+        "title": { "type": "string" },
+        "targetPlatform": { "type": "string" },
+        "contentType": { "type": "string" },
+        "topicOrUrl": { "type": "string" },
+        "hookText": { "type": "string" },
+        "mainBodyText": { "type": "string" },
+        "ctaText": { "type": "string" },
+        "hashtags": { "type": "string" },
+        "scriptJson": { "type": "string" },
+        "isFavorite": { "type": "boolean" },
+        "timestamp": { "type": "number" },
+        "updatedAtMs": { "type": "number" }
+      }
+    },
+    "scheduled_posts": {
+      "path": "users/{userId}/scheduled_posts/{postId}",
+      "description": "Scheduled content calendar entries",
+      "fields": {
+        "id": { "type": "number" },
+        "title": { "type": "string" },
+        "platform": { "type": "string" },
+        "postBody": { "type": "string" },
+        "scheduledTimeMs": { "type": "number" },
+        "status": { "type": "string" },
+        "mediaUriOrPrompt": { "type": "string" },
+        "campaignName": { "type": "string" },
+        "updatedAtMs": { "type": "number" }
+      }
+    }
+  }
+}

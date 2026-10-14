@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Center AI Magic Sparkle & Play Badge -->
+    <path
+        android:fillColor="#818CF8"
+        android:pathData="M54,28 L57.5,45.5 L75,49 L57.5,52.5 L54,70 L50.5,52.5 L33,49 L50.5,45.5 Z" />
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M72,26 L73.8,35.2 L83,37 L73.8,38.8 L72,48 L70.2,38.8 L61,37 L70.2,35.2 Z" />
+    <path
+        android:fillColor="#C084FC"
+        android:pathData="M36,60 L37.5,67.5 L45,69 L37.5,70.5 L36,78 L34.5,70.5 L27,69 L34.5,67.5 Z" />
+</vector>

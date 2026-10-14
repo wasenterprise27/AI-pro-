@@ -1,0 +1,6 @@
+# Authorized Digital Sellers for Mobile Apps (app-ads.txt)
+# Google AdMob Network for ContentGen AI Pro (AI pro 001)
+# Package: com.aistudio.contentgenai.vyrkzp
+# AdMob App ID: ca-app-pub-2572430667748626~1973658266
+# Publisher Account: pub-2572430667748626
+google.com, pub-2572430667748626, DIRECT, f08c47fec0942fa0

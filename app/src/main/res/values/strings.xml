@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AI pro 001</string>
+    <string name="google_app_id" translatable="false">1:1088618533358:android:88e68d4d9b4ce45a54feff</string>
+    <string name="gcm_defaultSenderId" translatable="false">1088618533358</string>
+    <string name="default_web_client_id" translatable="false">1088618533358-pcr4p8r7bol0ni7sepvhmgi4spvmlijp.apps.googleusercontent.com</string>
+    <string name="google_api_key" translatable="false">AIzaSyBlMkL9KGYjGARipuBoKyALAIMrvfpuLRg</string>
+    <string name="project_id" translatable="false">project-72348341-7835-4323-a34</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-2572430667748626~1973658266</string>
+    <string name="app_version_name">1.2.0</string>
+    <string name="app_version_code">3</string>
+</resources>
