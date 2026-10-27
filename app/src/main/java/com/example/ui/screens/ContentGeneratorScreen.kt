@@ -25,7 +25,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.admob.AdMobBanner
 import com.example.data.admob.AdMobInterstitialHelper
+import com.google.android.gms.ads.AdSize
 import com.example.data.auth.AuthManager
 import com.example.data.local.BrandKitEntity
 import com.example.data.remote.GeneratedContentPackage
@@ -480,6 +482,18 @@ fun ContentGeneratorScreen(viewModel: ContentViewModel) {
                         }
                     }
                 }
+            }
+        }
+
+        // Google AdMob Banner for Free Tier Users
+        if (AdMobInterstitialHelper.isFreeTierUser(userPlanTier)) {
+            item {
+                AdMobBanner(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    adSize = AdSize.BANNER
+                )
             }
         }
     }

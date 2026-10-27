@@ -98,6 +98,7 @@ fun AdminSettingsScreen(viewModel: ContentViewModel) {
     var editNicheInput by remember { mutableStateOf(currentUser?.creatorNiche ?: "") }
 
     var showPrivacyPolicyDialog by remember { mutableStateOf(false) }
+    var showWhatsNewDialog by remember { mutableStateOf(false) }
     var showAccountDeletionDialog by remember { mutableStateOf(false) }
     var userDeletionEmailInput by remember { mutableStateOf("") }
     var isDeletionSubmitted by remember { mutableStateOf(false) }
@@ -971,7 +972,7 @@ fun AdminSettingsScreen(viewModel: ContentViewModel) {
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
-                                text = "v1.2.0 (Build 3)",
+                                text = "v1.3.0 (Build 6)",
                                 color = EmeraldSuccess,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
@@ -980,15 +981,15 @@ fun AdminSettingsScreen(viewModel: ContentViewModel) {
                         }
                     }
 
-                    Divider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
 
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Version Name", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("1.2.0", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        Text("1.3.0", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Version Code", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text("3", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        Text("6", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Target SDK", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1005,6 +1006,18 @@ fun AdminSettingsScreen(viewModel: ContentViewModel) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Automotive Support", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Text("CarAppService Active", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = EmeraldSuccess)
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    OutlinedButton(
+                        onClick = { showWhatsNewDialog = true },
+                        modifier = Modifier.fillMaxWidth().testTag("view_release_notes_btn"),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = CyanAccentLight)
+                    ) {
+                        Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("🌟 View Production Release Highlights (v1.3.0)", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -1272,6 +1285,80 @@ You hold the absolute right to purge all data at any time via Settings > Delete 
             dismissButton = {
                 TextButton(onClick = { showEditProfileDialog = false }) {
                     Text("Cancel")
+                }
+            }
+        )
+    }
+
+    // What's New in Production Release Dialog
+    if (showWhatsNewDialog) {
+        AlertDialog(
+            onDismissRequest = { showWhatsNewDialog = false },
+            icon = { Icon(Icons.Default.RocketLaunch, contentDescription = null, tint = CyanAccentLight, modifier = Modifier.size(28.dp)) },
+            title = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("🌟 What's New in Production", fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                    Text("Release v1.3.0 • Build 6", fontSize = 11.sp, color = EmeraldSuccess, fontWeight = FontWeight.Bold)
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .heightIn(max = 420.dp)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Surface(
+                        color = IndigoPrimary.copy(alpha = 0.12f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("💰 Google Mobile Ads Monetization", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = IndigoPrimaryLight)
+                            Text("• Rewarded Video Ads: Watch quick video ads anytime to refill +5 AI Generation Credits for free.\n• Adaptive Banner Ads: Non-intrusive banner placements in Generator, Video Studio, Image Studio, and Monetization Suite.\n• Interstitial Ads: Monetizes free-tier generation completions.\n• Native Unified Ads: Embedded into the creator feed.\n• App Open Ads: Foreground transition ad support.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface)
+                        }
+                    }
+
+                    Surface(
+                        color = EmeraldSuccess.copy(alpha = 0.12f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("💳 Google Play In-App Billing v7.1.1", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = EmeraldSuccess)
+                            Text("• Pro Lifetime Access: Unlock unlimited AI content generation and multi-channel scheduling.\n• 100 AI Credits Pack: Instant token refills.\n• Business VIP Creator Pass: Agency workspaces, brand kits, and white-label exports.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface)
+                        }
+                    }
+
+                    Surface(
+                        color = CyanAccent.copy(alpha = 0.12f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("☁️ Cloud Realtime Sync & Security", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = CyanAccentLight)
+                            Text("• Firebase Cloud Firestore synchronization with offline persistence.\n• Zero-trust security rules isolating each creator's drafts and campaigns.\n• Auto-save draft engine preserving inputs every 5 seconds.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface)
+                        }
+                    }
+
+                    Surface(
+                        color = AmberWarning.copy(alpha = 0.12f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("🎬 Video Studio 2.0 & Affiliate Tools", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = AmberWarning)
+                            Text("• Scene-by-scene script generator for 30s+ ads, TikTok, and YouTube Shorts.\n• Text-to-speech audio narration player for teleprompter practice.\n• Amazon Affiliate direct-response copywriter and digital store builder.", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurface)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showWhatsNewDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = IndigoPrimary)
+                ) {
+                    Text("Got It!")
                 }
             }
         )

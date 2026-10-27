@@ -27,6 +27,7 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -259,10 +260,36 @@ object AdMobManager {
 
         val appContext = context.applicationContext
         // Ensure WebView cache hierarchy exists before Chromium initializes its disk cache index
+        // and sanitize stale/unsigned variations seed files to prevent variations_seed_loader.cc errors
         try {
             val baseCache = File(appContext.cacheDir, "WebView/Default/HTTP Cache/Code Cache")
             File(baseCache, "js").mkdirs()
             File(baseCache, "wasm").mkdirs()
+
+            val webViewDirs = listOf(
+                File(appContext.dataDir, "app_webview"),
+                File(appContext.dataDir, "app_webview/Default"),
+                File(appContext.cacheDir, "WebView"),
+                File(appContext.cacheDir, "WebView/Default")
+            )
+            val seedNames = listOf(
+                "Variations Seed",
+                "variations_seed",
+                "Variations Stamp",
+                "variations_stamp",
+                "variations_seed_new",
+                "Variations Seed.tmp"
+            )
+            for (dir in webViewDirs) {
+                if (dir.exists()) {
+                    for (name in seedNames) {
+                        val file = File(dir, name)
+                        if (file.exists()) {
+                            file.delete()
+                        }
+                    }
+                }
+            }
         } catch (_: Exception) {}
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -423,6 +450,70 @@ object AdMobManager {
             onRewardGranted(5, "Bonus Credits")
             onAdClosed?.invoke()
             loadRewardedAd(activity)
+        }
+    }
+
+    // App Open Ad State & Management
+    private var appOpenAd: AppOpenAd? = null
+    private var isAppOpenLoading: Boolean = false
+    private var appOpenLoadTime: Long = 0L
+
+    fun loadAppOpenAd(context: Context) {
+        if (isAppOpenLoading || isAppOpenAdAvailable()) return
+        val appContext = context.applicationContext
+        isAppOpenLoading = true
+        val request = AdRequest.Builder().build()
+        val adUnitId = TEST_APP_OPEN_AD_UNIT_ID
+
+        AppOpenAd.load(
+            appContext,
+            adUnitId,
+            request,
+            object : AppOpenAd.AppOpenAdLoadCallback() {
+                override fun onAdLoaded(ad: AppOpenAd) {
+                    appOpenAd = ad
+                    isAppOpenLoading = false
+                    appOpenLoadTime = System.currentTimeMillis()
+                    Log.d(TAG, "App Open Ad loaded successfully")
+                }
+
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    isAppOpenLoading = false
+                    appOpenAd = null
+                    Log.w(TAG, "App Open Ad failed to load: ${loadAdError.message}")
+                }
+            }
+        )
+    }
+
+    fun isAppOpenAdAvailable(): Boolean {
+        return appOpenAd != null && (System.currentTimeMillis() - appOpenLoadTime < 4 * 3600 * 1000)
+    }
+
+    fun showAppOpenAdIfAvailable(activity: Activity, onDismiss: (() -> Unit)? = null) {
+        val ad = appOpenAd
+        if (ad != null && isAppOpenAdAvailable()) {
+            ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    appOpenAd = null
+                    loadAppOpenAd(activity)
+                    onDismiss?.invoke()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    appOpenAd = null
+                    loadAppOpenAd(activity)
+                    onDismiss?.invoke()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    recordImpression(0.01)
+                }
+            }
+            ad.show(activity)
+        } else {
+            loadAppOpenAd(activity)
+            onDismiss?.invoke()
         }
     }
 
@@ -688,6 +779,11 @@ fun AdMobBanner(
                                 Log.w("AdMobBanner", "Exception requesting banner ad", e)
                             }
                         }
+                    },
+                    onRelease = { adView ->
+                        try {
+                            adView.destroy()
+                        } catch (_: Exception) {}
                     },
                     modifier = Modifier.wrapContentSize()
                 )

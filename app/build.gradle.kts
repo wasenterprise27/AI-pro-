@@ -17,19 +17,31 @@ android {
     applicationId = "com.aistudio.contentgenai.vyrkzp"
     minSdk = 24
     targetSdk = 36
-    versionCode = 5
-    versionName = "1.2.2"
+    versionCode = 6
+    versionName = "1.3.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
   signingConfigs {
     create("release") {
-      val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
-      storeFile = file(keystorePath)
-      storePassword = System.getenv("STORE_PASSWORD")
-      keyAlias = "upload"
-      keyPassword = System.getenv("KEY_PASSWORD")
+      val envKeystore = System.getenv("KEYSTORE_PATH")
+      if (!envKeystore.isNullOrEmpty() && file(envKeystore).exists()) {
+        storeFile = file(envKeystore)
+        storePassword = System.getenv("STORE_PASSWORD")
+        keyAlias = "upload"
+        keyPassword = System.getenv("KEY_PASSWORD")
+      } else if (file("${rootDir}/my-upload-key.jks").exists()) {
+        storeFile = file("${rootDir}/my-upload-key.jks")
+        storePassword = "ContentGenAI2026!"
+        keyAlias = "upload"
+        keyPassword = "ContentGenAI2026!"
+      } else {
+        storeFile = file("${rootDir}/debug.keystore")
+        storePassword = "android"
+        keyAlias = "androiddebugkey"
+        keyPassword = "android"
+      }
     }
     create("debugConfig") {
       storeFile = file("${rootDir}/debug.keystore")

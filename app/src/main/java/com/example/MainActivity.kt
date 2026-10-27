@@ -1,5 +1,6 @@
 package com.example
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -53,10 +54,36 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         // Pre-create WebView HTTP Cache directories to avoid Chromium opendir ENOENT error on first run
+        // and sanitize stale/unsigned variations seed files to prevent variations_seed_loader.cc errors
         try {
             val baseCache = File(cacheDir, "WebView/Default/HTTP Cache/Code Cache")
             File(baseCache, "js").mkdirs()
             File(baseCache, "wasm").mkdirs()
+
+            val webViewDirs = listOf(
+                File(dataDir, "app_webview"),
+                File(dataDir, "app_webview/Default"),
+                File(cacheDir, "WebView"),
+                File(cacheDir, "WebView/Default")
+            )
+            val seedNames = listOf(
+                "Variations Seed",
+                "variations_seed",
+                "Variations Stamp",
+                "variations_stamp",
+                "variations_seed_new",
+                "Variations Seed.tmp"
+            )
+            for (dir in webViewDirs) {
+                if (dir.exists()) {
+                    for (name in seedNames) {
+                        val file = File(dir, name)
+                        if (file.exists()) {
+                            file.delete()
+                        }
+                    }
+                }
+            }
         } catch (_: Exception) {}
 
         // Global uncaught exception safety wrapper to prevent unexpected background thread crashes
@@ -75,9 +102,11 @@ class MainActivity : ComponentActivity() {
         // This prevents Chromium/Mesa graphics driver contention during window surface creation
         window.decorView.post {
             AdMobManager.initialize(this@MainActivity) {
-                // Preload interstitial after UI rendering has settled
+                // Preload interstitial, rewarded, and app open ads after UI rendering has settled
                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                     com.example.data.admob.AdMobInterstitialHelper.preload(this@MainActivity)
+                    AdMobManager.loadRewardedAd(this@MainActivity)
+                    AdMobManager.loadAppOpenAd(this@MainActivity)
                 }, 1500)
             }
         }
@@ -112,6 +141,7 @@ fun ContentGenApp(viewModel: ContentViewModel) {
     val currentUser by AuthManager.currentUser.collectAsState()
     var selectedTab by remember { mutableIntStateOf(0) }
     var showUserMenu by remember { mutableStateOf(false) }
+    var showCreditsDialog by remember { mutableStateOf(false) }
 
     val navItems = remember {
         listOf(
@@ -173,7 +203,7 @@ fun ContentGenApp(viewModel: ContentViewModel) {
                             shape = RoundedCornerShape(50),
                             modifier = Modifier
                                 .clickable {
-                                    Toast.makeText(context, "${user.aiCredits} AI Credits available! Watch ads in Monetization to earn more.", Toast.LENGTH_SHORT).show()
+                                    showCreditsDialog = true
                                 }
                                 .testTag("top_app_bar_credits_badge")
                         ) {
@@ -345,5 +375,91 @@ fun ContentGenApp(viewModel: ContentViewModel) {
                 9 -> AdminSettingsScreen(viewModel = viewModel)
             }
         }
+    }
+
+    if (showCreditsDialog && currentUser != null) {
+        val user = currentUser!!
+        val activity = context as? Activity
+        AlertDialog(
+            onDismissRequest = { showCreditsDialog = false },
+            icon = {
+                Icon(Icons.Default.Bolt, contentDescription = null, tint = AmberWarning, modifier = Modifier.size(32.dp))
+            },
+            title = {
+                Text("AI Generation Credits", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        text = "Current Balance: ${user.aiCredits} Credits",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AmberWarning
+                    )
+                    Text(
+                        text = "Credits are used for generating viral captions, video scripts, marketing copy, and AI image prompts.",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Surface(
+                        color = IndigoPrimary.copy(alpha = 0.12f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(Icons.Default.AdsClick, contentDescription = null, tint = IndigoPrimaryLight, modifier = Modifier.size(20.dp))
+                            Text(
+                                text = "Powered by Google Mobile Ads SDK. Watch a sponsored video ad anytime to earn +5 free credits!",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showCreditsDialog = false
+                        if (activity != null) {
+                            AdMobManager.showRewardedAd(
+                                activity = activity,
+                                onRewardGranted = { amount, _ ->
+                                    val granted = if (amount > 0) amount else 5
+                                    AuthManager.addCredits(granted)
+                                    Toast.makeText(context, "🎉 You earned +$granted Free AI Credits!", Toast.LENGTH_LONG).show()
+                                },
+                                onAdClosed = {
+                                    Toast.makeText(context, "Rewarded ad closed", Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        } else {
+                            AuthManager.addCredits(5)
+                            Toast.makeText(context, "Added +5 AI Credits!", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = EmeraldSuccess),
+                    modifier = Modifier.testTag("watch_rewarded_ad_dialog_btn")
+                ) {
+                    Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Watch Ad (+5 Credits)")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showCreditsDialog = false
+                        selectedTab = 7 // Navigate to Affiliate / Monetization Suite
+                    }
+                ) {
+                    Text("Upgrade Plan")
+                }
+            }
+        )
     }
 }
