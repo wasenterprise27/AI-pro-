@@ -189,9 +189,10 @@ object PlayBillingManager : PurchasesUpdatedListener, BillingClientStateListener
             .setProductList(productList)
             .build()
 
-        client.queryProductDetailsAsync(params) { billingResult, queryProductDetailsList ->
+        client.queryProductDetailsAsync(params) { billingResult, queryProductDetailsResult ->
             if (billingResult.responseCode == BillingResponseCode.OK) {
-                val detailsMap = queryProductDetailsList.associateBy { it.productId }
+                val detailsList = queryProductDetailsResult.productDetailsList
+                val detailsMap = detailsList.associateBy { it.productId }
                 val uiProducts = listOf(
                     PlayBillingProduct(
                         productId = PRODUCT_LIFETIME_PRO,

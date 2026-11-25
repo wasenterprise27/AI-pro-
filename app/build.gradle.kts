@@ -17,8 +17,8 @@ android {
     applicationId = "com.aistudio.contentgenai.vyrkzp"
     minSdk = 24
     targetSdk = 36
-    versionCode = 6
-    versionName = "1.3.0"
+    versionCode = 3
+    versionName = "3.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -68,8 +68,35 @@ android {
     compose = true
     buildConfig = true
   }
+  bundle {
+    language {
+      enableSplit = false
+    }
+    density {
+      enableSplit = true
+    }
+    abi {
+      enableSplit = true
+    }
+  }
+  packaging {
+    resources {
+      excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    }
+  }
   testOptions { unitTests { isIncludeAndroidResources = true } }
 }
+
+// Clean-up step to purge previous build artifacts before creating the release bundle to avoid generic build failures
+val cleanPreviousBundleArtifacts by tasks.registering(Delete::class) {
+  delete(layout.buildDirectory.dir("outputs/bundle"))
+}
+
+tasks.matching { it.name == "bundleRelease" }.configureEach {
+  dependsOn(cleanPreviousBundleArtifacts)
+}
+
+
 
 // Configure the Secrets Gradle Plugin to use .env and .env.example files
 // to match the convention used in Web projects.

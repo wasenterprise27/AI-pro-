@@ -1134,7 +1134,7 @@ You hold the absolute right to purge all data at any time via Settings > Delete 
                                 putExtra(android.content.Intent.EXTRA_SUBJECT, "Privacy Policy - AI pro 001")
                                 putExtra(
                                     android.content.Intent.EXTRA_TEXT,
-                                    "AI pro 001 Official Privacy Policy\nPackage: com.aistudio.contentgenai.vyrkzp\nContact: stephenampangwapyalenge@gmail.com\n\nFull policy HTML is available in docs/index.html and privacy-policy.html."
+                                    "AI pro 001 Official Privacy Policy\nPackage: com.aistudio.contentgenai.vyrkzp\nContact: stephenampangwapyalenge@gmail.com\n\nFull policy HTML is available in docs/privacy-policy.html and privacy-policy.html."
                                 )
                                 type = "text/plain"
                             }
